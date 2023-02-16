@@ -37,9 +37,9 @@
     <!-- 內容專區 -->
     <div class="container mt-3" style="max-width: 800px">
       <!-- my profile -->
-      <div class="row" id="my-profile">
-        <div class="mb-2mb-3">
-          <div class="row g-0">
+      <div class="row " id="my-profile" >
+        <div class="mb-2 mb-3" >
+          <div class="row g-0 " >
             <div class="col-md-4">
               <img
                 src="https://static01.nyt.com/newsgraphics/2020/11/12/fake-people/4b806cf591a8a76adfc88d19e90c8c634345bf3d/fallbacks/mobile-05.jpg"
@@ -50,22 +50,24 @@
             </div>
             <div class="col-md-8">
               <div class="card-body">
-                <h5 class="card-title">Your record</h5>
-                <p class="card-text">
-                  This is a wider card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
-                </p>
-                <p class="card-text">
-                  <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-              </div>
+                <h5 class="card-title" id="game-record">Your record</h5>
+                <p class="card-text my-1">Total Battles : 1023</p>
+                <p class="card-text my-1">Total Wins : 823</p>
+                <p class="card-text my-1">Total Loses : 100</p>
+                <p class="card-text my-1">Total Draws : 100</p>
             </div>
           </div>
         </div>
       </div>
       <div class="row mt-4 mb-4">
         <h2 class="text-center">Choose your opponent</h2>
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          style="width: 200px; margin: 20px auto"
+        >
+          Random Match
+        </button>
       </div>
       <div class="row d-flex justify-content-between" id="data-panel">
         <!-- render user list here -->
@@ -76,6 +78,15 @@
     <nav aria-label="Page navigation" class="mt-4">
       <ul class="pagination justify-content-center" id="paginator"></ul>
     </nav>
+    <!-- footer -->
+    <div class="container">
+     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <div class="col-md-4 d-flex align-items-center">
+
+      <span class="text-small">© 2021 Company, Inc</span>
+    </div>
+  </footer>
+</div>
 
     <!-- modal area  -->
     <div class="modal" id="user-modal" tabindex="-1">
@@ -111,6 +122,11 @@
               <p>Region :</p>
               <p>Email :</p>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" id="battle-button">
+             <a href="battle-page.html" style="text-decoration:none; color: white;">Battle</a> 
+            </button>
           </div>
         </div>
       </div>

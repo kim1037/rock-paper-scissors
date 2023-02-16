@@ -5,6 +5,34 @@ const USERS_PER_PAGE = 16;
 let usersList = [];
 const list = JSON.parse(localStorage.getItem("favoriteUsers")) || [];
 
+// ```
+// set dataset to record history of fight,
+// {
+//   'fights': 134
+//   'win':104,
+//   'lose':20,
+//   'draw':10,
+//   'oppnent_record' : [
+//     {
+//       'id' : 1,
+//       'fights':,
+//       'win' : 2,
+//       'lose' : 5
+//       'draw' : 0 
+//     },
+//         {
+//       'id' : 2,
+//       'fights':7,
+//       'win' : 2,
+//       'lose' : 5
+//       'draw' : 0 
+//     },....
+    
+//   ]
+// }
+
+// ```;
+
 const dataPanel = document.querySelector("#data-panel");
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
@@ -67,7 +95,7 @@ paginator.addEventListener("click", function onPaginatorClicked(event) {
 });
 
 dataPanel.addEventListener("click", function onAvatarClciked(event) {
-  if (event.target.matches(".user-avatar")) {
+  if (event.target.matches(".player-avatar")) {
     showUserModal(Number(event.target.dataset.id));
   }
 });
@@ -76,7 +104,6 @@ axios
   .get(INDEX_URL)
   .then((response) => {
     usersList.push(...response.data.results);
-    console.log(usersList);
     renderUserList(getUsersByPage(1));
     renderPaginator(usersList.length);
   })
