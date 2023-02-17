@@ -2,42 +2,36 @@ const BASE_URL = "https://user-list.alphacamp.io";
 const INDEX_URL = BASE_URL + "/api/v1/users/";
 const USERS_PER_PAGE = 16;
 
-let usersList = [];
-const list = JSON.parse(localStorage.getItem("favoriteUsers")) || [];
-
-// ```
-// set dataset to record history of fight,
-// {
-//   'fights': 134
-//   'win':104,
-//   'lose':20,
-//   'draw':10,
-//   'oppnent_record' : [
-//     {
-//       'id' : 1,
-//       'fights':,
-//       'win' : 2,
-//       'lose' : 5
-//       'draw' : 0 
-//     },
-//         {
-//       'id' : 2,
-//       'fights':7,
-//       'win' : 2,
-//       'lose' : 5
-//       'draw' : 0 
-//     },....
-    
-//   ]
-// }
-
-// ```;
+let usersList = []; //存放對手資訊
+//初始化個人戰績
+let myRecords = {
+  fights: 0,
+  win: 0,
+  lose: 0,
+  draw: 0,
+  oppnent_record: [],
+};
 
 const dataPanel = document.querySelector("#data-panel");
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
 const genderSelect = document.querySelector("#gender-select");
 const paginator = document.querySelector("#paginator");
+const showRecords = document.querySelector("#show-my-records");
+const modalBattleButton = document.querySelector("#battle-button");
+
+/////////////   function  /////////////
+function showMyRecords(record) {
+  let rawHTML = "";
+  rawHTML = `
+    <h5 class="card-title" >Your record</h5>
+    <p class="card-text my-1">Total Battles : ${record.fights}</p>
+    <p class="card-text my-1">Total Wins : ${record.win}</p>
+    <p class="card-text my-1">Total Loses : ${record.lose}</p>
+    <p class="card-text my-1">Total Draws : ${record.draw}</p>
+  `;
+  showRecords.innerHTML = rawHTML;
+}
 
 function renderUserList(users) {
   let rawHTML = "";
@@ -71,6 +65,12 @@ function showUserModal(id) {
             <p>Region : ${userData.region}</p>
             <p>Email : ${userData.email}</p>
   `;
+
+  modalBattleButton.innerHTML = `
+    <button type="button" 
+      class="btn btn-danger">
+      <a href="battle-page.html" class="go-battle" data-id="${userData.id}" style="text-decoration:none; color: white;">Battle</a> 
+    </button>`;
 }
 
 function getUsersByPage(page) {
@@ -87,6 +87,22 @@ function renderPaginator(amount) {
   paginator.innerHTML = rawHTML;
 }
 
+function getOppnentData(id) {
+  //先清除原有資料，避免出錯
+  localStorage.removeItem("currentOppnent");
+  //此function只取得對手name, avatar並存入localstorage中, 以便battle頁面顯示
+  const oppnent = usersList.find((user) => user.id === id);
+  const oppnentData = {
+    id: id,
+    name: `${oppnent.name} ${oppnent.surname}`,
+    avatar: oppnent.avatar,
+  };
+  console.log(oppnentData);
+  localStorage.setItem("currentOppnent", JSON.stringify(oppnentData)); //記得要把物件轉回字串才能存入localStorage
+}
+
+/////////////   監聽事件  /////////////
+
 paginator.addEventListener("click", function onPaginatorClicked(event) {
   if (event.target.tagName !== "A") return;
 
@@ -99,6 +115,19 @@ dataPanel.addEventListener("click", function onAvatarClciked(event) {
     showUserModal(Number(event.target.dataset.id));
   }
 });
+
+//選擇對手後，將資訊存放localstorage，以便新頁面存取資訊
+modalBattleButton.addEventListener(
+  "click",
+  function onBattleButtonClicked(event) {
+    if (event.target.matches(".go-battle")) {
+      getOppnentData(Number(event.target.dataset.id));
+    }
+  }
+);
+
+//顯示個人戰績
+showMyRecords(myRecords);
 
 axios
   .get(INDEX_URL)
