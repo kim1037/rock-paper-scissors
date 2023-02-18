@@ -1,16 +1,10 @@
 const BASE_URL = "https://user-list.alphacamp.io";
 const INDEX_URL = BASE_URL + "/api/v1/users/";
 const USERS_PER_PAGE = 16;
+const myName = setMyName()
 
 let usersList = []; //存放對手資訊
-//初始化個人戰績
-let myRecords = {
-  fights: 0,
-  win: 0,
-  lose: 0,
-  draw: 0,
-  oppnent_record: [],
-};
+const myRecords = getMyRecord();
 
 const dataPanel = document.querySelector("#data-panel");
 const searchForm = document.querySelector("#search-form");
@@ -19,8 +13,33 @@ const genderSelect = document.querySelector("#gender-select");
 const paginator = document.querySelector("#paginator");
 const showRecords = document.querySelector("#show-my-records");
 const modalBattleButton = document.querySelector("#battle-button");
+const randomMatchButton = document.querySelector("#random-battle");
 
 /////////////   function  /////////////
+function setMyName() {
+  const name =
+    JSON.parse(localStorage.getItem("myName")) ||
+    prompt("Please Enter your name:");
+
+  localStorage.setItem("myName", JSON.stringify(name));
+}
+
+function getMyRecord() {
+  // 取得個人戰績
+  let records = JSON.parse(localStorage.getItem("myRecords")) || {};
+  // 如果沒有紀錄，則執行下段並存入localstorge
+  if (!Object.keys(records).length) { //無法直接寫records.length會回傳undefined,物件長度要用上方寫法
+    records.fights= 0 
+    records.win= 0,
+    records.lose= 0,
+    records.draw= 0,
+    localStorage.setItem("myRecords", JSON.stringify(records));
+  }
+  records = JSON.parse(localStorage.getItem("myRecords"));
+  return records
+}
+
+//顯示戰績
 function showMyRecords(record) {
   let rawHTML = "";
   rawHTML = `
@@ -50,6 +69,7 @@ function renderUserList(users) {
   dataPanel.innerHTML = rawHTML;
 }
 
+//Show Player's Modal
 function showUserModal(id) {
   const userModalTItle = document.querySelector("#user-modal-title");
   const userModalImage = document.querySelector("#user-modal-image");
@@ -87,22 +107,21 @@ function renderPaginator(amount) {
   paginator.innerHTML = rawHTML;
 }
 
+//此function只取得對手name, avatar並存入localstorage中, 以便battle頁面顯示
 function getOppnentData(id) {
   //先清除原有資料，避免出錯
   localStorage.removeItem("currentOppnent");
-  //此function只取得對手name, avatar並存入localstorage中, 以便battle頁面顯示
+
   const oppnent = usersList.find((user) => user.id === id);
   const oppnentData = {
     id: id,
     name: `${oppnent.name} ${oppnent.surname}`,
     avatar: oppnent.avatar,
   };
-  console.log(oppnentData);
   localStorage.setItem("currentOppnent", JSON.stringify(oppnentData)); //記得要把物件轉回字串才能存入localStorage
 }
 
 /////////////   監聽事件  /////////////
-
 paginator.addEventListener("click", function onPaginatorClicked(event) {
   if (event.target.tagName !== "A") return;
 
@@ -115,6 +134,15 @@ dataPanel.addEventListener("click", function onAvatarClciked(event) {
     showUserModal(Number(event.target.dataset.id));
   }
 });
+
+//隨機配對對手
+randomMatchButton.addEventListener(
+  "click",
+  function onRandomMatchClicked(event) {
+    const randomId = Math.floor(Math.random() * usersList.length); //0~199
+    getOppnentData(randomId);
+  }
+);
 
 //選擇對手後，將資訊存放localstorage，以便新頁面存取資訊
 modalBattleButton.addEventListener(
