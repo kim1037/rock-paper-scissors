@@ -11,7 +11,7 @@ const actionArea = document.querySelector("#action-area");
 function renderMyData(mydata){
   myInfo.innerHTML = `
    <img
-      src="https://static01.nyt.com/newsgraphics/2020/11/12/fake-people/4b806cf591a8a76adfc88d19e90c8c634345bf3d/fallbacks/mobile-05.jpg"
+      src="https://cdn-icons-png.flaticon.com/512/147/147144.png"
       class="m-2 img-fluid rounded-start"
       alt="my avatar"
       style="width: 150px; height: 150px"
