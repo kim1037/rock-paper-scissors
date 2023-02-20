@@ -8,6 +8,8 @@ If it's your first time to play, you need to enter your name first.
 
 You can choose your oppnent or click random match.
 
+Every single game result will be saved in localstorage.
+
 ![image](https://user-images.githubusercontent.com/107454420/219850929-c124c8ad-0bca-4a75-8c29-53bc892ad056.png)
 
 
