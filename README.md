@@ -3,6 +3,8 @@ This is a project for practice.
 
 You can play Rock! Paper! Scissors! with computer. And your game results will save in the localstorage.
 
+[Let's Play](https://kim1037.github.io/rock-paper-scissors/)
+
 ## Main Page
 If it's your first time to play, you need to enter your name first.
 
